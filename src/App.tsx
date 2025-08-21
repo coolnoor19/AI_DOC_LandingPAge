@@ -33,15 +33,14 @@ export default function App() {
            internally, so the wrapper guarantees it sits above the others. */}
         <div className="absolute inset-0 z-30 pointer-events-none mix-blend-screen">
           <LightRays
-            // If your generated component exposes slightly different props,
-            // keep the ones it supports; these are safe defaults:
-            opacity={0.95}
+          />
+         
+            {/* opacity={0.95}
             rayColor="#ffffff"
             beams={6}
             spread={0.7}
             speed={0.22}
-            blurAmount={0.8}
-          />
+            blurAmount={0.8} this is going to add in the LightRays component */}
         </div>
       </div>
 
