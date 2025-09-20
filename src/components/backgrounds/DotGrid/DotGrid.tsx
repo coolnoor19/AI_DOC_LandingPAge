@@ -487,24 +487,47 @@ const DotGrid: React.FC<DotGridProps> = ({
   }, [circlePath, proximity, baseColor, baseRgb, activeRgb]);
 
   /** Handle resize */
+  // useEffect(() => {
+  //   buildGrid();
+  //   const wrap = wrapperRef.current;
+  //   if (!wrap) return;
+
+  //   let ro: ResizeObserver | null = null;
+  //   if ("ResizeObserver" in window) {
+  //     ro = new ResizeObserver(buildGrid);
+  //     ro.observe(wrap);
+  //   } else {
+  //     window.addEventListener("resize", buildGrid);
+  //   }
+
+  //   return () => {
+  //     if (ro) ro.disconnect();
+  //     else window.removeEventListener("resize", buildGrid);
+  //   };
+  // }, [buildGrid]);
   useEffect(() => {
-    buildGrid();
-    const wrap = wrapperRef.current;
-    if (!wrap) return;
+  buildGrid();
+  const wrap = wrapperRef.current;
+  if (!wrap) return;
 
-    let ro: ResizeObserver | null = null;
-    if ("ResizeObserver" in window) {
-      ro = new ResizeObserver(buildGrid);
-      ro.observe(wrap);
-    } else {
-      window.addEventListener("resize", buildGrid);
+  let ro: ResizeObserver | null = null;
+  const handleResize = () => buildGrid();
+
+  if (typeof window !== "undefined" && "ResizeObserver" in window) {
+    ro = new ResizeObserver(handleResize);
+    ro.observe(wrap);
+  } else if (typeof window !== "undefined") {
+    (window as Window).addEventListener("resize", handleResize);
+  }
+
+  return () => {
+    if (ro) {
+      ro.disconnect();
+    } else if (typeof window !== "undefined") {
+      window.removeEventListener("resize", handleResize);
     }
-
-    return () => {
-      if (ro) ro.disconnect();
-      else window.removeEventListener("resize", buildGrid);
-    };
-  }, [buildGrid]);
+  };
+}, [buildGrid]);
 
   /** Pointer effects (inertia + click shock) */
   useEffect(() => {
